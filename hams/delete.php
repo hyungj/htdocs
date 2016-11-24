@@ -1,28 +1,31 @@
 <?php
 require_once 'inc/header.php';
-$db_host="localhost";
-$db_name="test1";
-$db_type="mysql";
-$dsn="$db_type:host=$db_host;dbname=$db_name;charset=utf8";
-$db_user="root";
-$db_pass="";
-try{
-    $pdo=new PDO($dsn,$db_user,$db_pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES,false);
-    print "";}
-    catch(PDOException $Exception){
-        die('오류'.$Exception->getMessage());
-    
-}
-if(isset($_GET['idx'])){
-    $idx=$_GET['idx'];
+require_once 'inc/dbcon.php';
+?>
+<?php
+    session_start();
+
+    if($_SESSION[userid] == "$userid")
+    {
+        echo "
+        <html><head><title>삭제</title></head>
+        <body>
+        <center>삭제
+        <form method='POST' action='delete_ok.php'>
+            <input type=hidden name=idx value='$idx'>
+            <center><input type='submit' value='삭제'>$nbsp; |<a href='sub1.php'>목록</a>
+            </form>
+            </center>
+            </body>
+            </html> ";
+    }
+else
+{
+    echo "
+        <script language='javascript'>
+            alert('글을 삭제하실수 없습니다.');
+            history.back();
+        </script> ";
 }
 
-$sql = "delete from bor where idx=:idx";
-$stmh = $pdo->prepare($sql);
-$stmh->bindValue(":idx",$idx);
-$stmh->execute();
-
-header ("location:sub1.php");
 ?>
